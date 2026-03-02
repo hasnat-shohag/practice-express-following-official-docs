@@ -19,13 +19,24 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const fakePost = require("./routes/fakeApi");
 const testRouter = require("./routes/test");
-const mergeParamRouter = require("./routes/mergeParamExample/users");
+const mergeParamRouter = require("./routes/merge_param_example/users");
+
+// Expense Tracker API Routes
+const expenseApiRouter = require("./src/routes/index");
+
+// Swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swagger");
 
 const app = express();
 
 // --- 1. Security & Performance ---
 app.use(helmet()); // Basic security headers
-app.use(cors()); // Enable CORS
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+})); // Enable CORS
 app.use(compression()); // Compress responses
 
 // view engine setup
@@ -59,6 +70,12 @@ app.use("/posts", fakePost);
 app.use("/test", testRouter);
 app.use("/mergeparam", mergeParamRouter);
 
+// Expense Tracker API Endpoints group
+app.use("/api", expenseApiRouter);
+
+// Swagger Documentation Route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // --- 5. Error Handling ---
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -67,7 +84,5 @@ app.use(function (req, res, next) {
 
 // Centralized error handler (Last middleware)
 app.use(errorHandler);
-
-module.exports = app;
 
 module.exports = app;
