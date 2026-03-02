@@ -15,12 +15,6 @@ const errorHandler = require("./middleware/errorHandler");
 const validateCookies = require("./middleware/validateCookies");
 
 // Routes
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const fakePost = require("./routes/fakeApi");
-const testRouter = require("./routes/test");
-const mergeParamRouter = require("./routes/merge_param_example/users");
-
 // Expense Tracker API Routes
 const expenseApiRouter = require("./src/routes/index");
 
@@ -32,11 +26,7 @@ const app = express();
 
 // --- 1. Security & Performance ---
 app.use(helmet()); // Basic security headers
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-})); // Enable CORS
+app.use(cors()); // Enable CORS
 app.use(compression()); // Compress responses
 
 // view engine setup
@@ -64,12 +54,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // --- 4. Routes ---
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/posts", fakePost);
-app.use("/test", testRouter);
-app.use("/mergeparam", mergeParamRouter);
-
 // Expense Tracker API Endpoints group
 app.use("/api", expenseApiRouter);
 
